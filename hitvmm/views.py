@@ -122,7 +122,9 @@ def report_correct(request):
 
     return render(request,'hitvmm/report_correct.html',{'name':name,'password':password,'user':user_id,'reports':reports})
 
-#老师批阅报告
+
+
+# 老师批阅报告
 def report_correct_view(request,v_id):
     name=request.COOKIES.get('name')
     if not name:

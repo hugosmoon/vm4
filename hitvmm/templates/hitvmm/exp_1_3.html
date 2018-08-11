@@ -1,0 +1,458 @@
+ <!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
+    <script src="{% static 'jquery3.3.1.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/plugins/pace.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'js/plugins/bootstrap-datepicker.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/select2.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/bootstrap-datepicker.min.js' %}"></script>
+
+
+    <script type="text/javascript">
+      $('#sl').click(function(){
+      	$('#tl').loadingBtn();
+      	$('#tb').loadingBtn({ text : "Signing In"});
+      });
+
+      $('#el').click(function(){
+      	$('#tl').loadingBtnComplete();
+      	$('#tb').loadingBtnComplete({ html : "Sign In"});
+      });
+
+      $('#demoDate').datepicker({
+      	format: "dd/mm/yyyy",
+      	autoclose: true,
+      	todayHighlight: true
+      });
+
+      $('#demoSelect').select2();
+    </script>
+
+    <style type="text/css">
+
+    #align-mid td /*设置表格文字左右和上下居中对齐*/
+        {
+            vertical-align: middle;
+            text-align: center;
+        }
+
+      </style>
+
+
+
+
+
+    <title>切削用量对切削力的影响</title>
+
+  </head>
+  <body class="sidebar-mini fixed">
+    <div class="wrapper">
+      <!-- Navbar-->
+      <header class="main-header hidden-print"><a class="logo" href="{% url 'hitvmm:index'%}">Virtual Machining Lab 3.0</a>
+        <nav class="navbar navbar-static-top">
+          <!-- Navbar Right Menu-->
+          <div class="navbar-custom-menu">
+            <div style="margin-top:15px;">
+              <center>
+
+                <h4>切削用量对切削力的影响</h4>
+              </center>
+
+
+        </nav>
+      </header>
+      <!-- Side-Nav-->
+      <aside class="main-sidebar hidden-print">
+        <section class="sidebar">
+          <div class="user-panel">
+            <div class="pull-left image"><img class="img-circle" src="{% static 'pic/head.jpg' %}" alt="User Image"></div>
+            <div class="pull-left info">
+              <p>{{name}}</p>
+                <a href="{% url 'hitvmm:login'%}">退出登录</a>
+            </div>
+          </div>
+          <!-- Sidebar Menu-->
+          <ul class="sidebar-menu">
+            <li><a href="{% url 'hitvmm:index'%}"><i class="fa fa-laptop"></i><span>实验预习</span></a></li>
+            <li class="active"><a href="{% url 'hitvmm:exp_opr'%}"><i class="fa fa-dashboard"></i><span>实验操作</span></a></li>
+            <li><a href="{% url 'hitvmm:report'%}"><i class="fa fa-file-text"></i><span>实验报告</span></a></li>
+          </ul>
+        </section>
+      </aside>
+      <div class="content-wrapper">
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card">
+              <h3 class="card-title">切削用量对切削力的影响</h3>
+              <p>② 改变进给量单因素切削力实验</p>
+              <div class="card-footer">
+              </div>
+              <!--Radio Button Markup-->
+              <div class="row">
+
+
+
+
+                      <div class="col-lg-12">
+
+                        <table class="table table-hover">
+                        <tr>
+                          <td>
+                            <label class="control-label">切削速度</label>
+                          </td>
+                        <td valign="middle">
+                          <input type="range" id="qxsdx" min="0" max="280" step="0.1" onmouseup="document.getElementById('xianshiqxsdx').value=document.getElementById('qxsdx').value"/>
+                        </td>
+                        <td>
+                          <input class="btn btn-info btn-sm" type="button" id="qxsdyweitiao_1" value="<-" onclick="weijian3('qxsdx','xianshiqxsdx')">
+                          微调
+                          <input class="btn btn-info btn-sm" type="button" id="qxsdyweitiao_1" value="->" onclick="weizeng3('qxsdx','xianshiqxsdx')">
+                        </td>
+                        <td valign="middle">
+                          <input style="width:45px" type="value" id="xianshiqxsdx" value="140" readonly/><p1>m/min</p1>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td></td><td></td><td></td><td></td>
+                      </tr>
+
+                      <tr>
+                        <td>
+                          <label  class="control-label">背吃刀量</label>
+                        </td>
+                        <td>
+                                <input type="range" id="bcdlx" min="1" max="6" step="0.1" onmouseup="document.getElementById('xianshibcdlx').value=document.getElementById('bcdlx').value">                        </td>
+                        <td>
+                          <input class="btn btn-info btn-sm" type="button" id="qxsdyweitiao_1" value="<-" onclick="weijian1('bcdlx','xianshibcdlx')">
+                  				微调
+                  				<input class="btn btn-info btn-sm" type="button" id="qxsdyweitiao_1" value="->" onclick="weizeng1('bcdlx','xianshibcdlx')">
+                        </td>
+                        <td>
+                          <input style="width:45px" type="value" id="xianshibcdlx" value="3.5" readonly/><p1>mm</p1>
+                        </td>
+
+                      </tr>
+                      <tr>
+                        <td></td><td></td><td></td><td></td>
+                      </tr>
+
+                        <tr>
+                          <td></td><td></td><td></td><td></td>
+                        </tr>
+
+
+                        <tr>
+                          <td><label  class="control-label">进给量</label>  </td>
+                          <td>为保证实验质量，请尽可能分散取值</td><td></td><td></td>
+                        </tr>
+
+                        <!-- 第1组进给量 -->
+                        <tr>
+                          <td>
+                            <label  class="control-label"></label>
+                          </td>
+                          <td>
+                            <input type="range" id="jjlx_1" min="0.1" max="0.6" step="0.01" onmouseup="document.getElementById('xianshijjlx_1').value=document.getElementById('jjlx_1').value">
+                          <td>
+                            <input class="btn btn-info btn-sm" type="button" id="qxsdyweitiao_1" value="<-" onclick="weijian2('jjlx_1','xianshijjlx_1')">
+              							微调
+              							<input class="btn btn-info btn-sm" type="button" id="qxsdyweitiao_1" value="->" onclick="weizeng2('jjlx_1','xianshijjlx_1')">
+                          </td>
+                          <td>
+                            <input style="width:40px" type="value" id="xianshijjlx_1" value="0.35" readonly/><p1>mm/r</p1>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td></td><td></td><td></td><td></td>
+                        </tr>
+                        <!-- 第2组进给量 -->
+                          <tr>
+                            <td>
+                              <label  class="control-label"></label>
+                            </td>
+                            <td>
+                              <input type="range" id="jjlx_2" min="0.1" max="0.6" step="0.01" onmouseup="document.getElementById('xianshijjlx_2').value=document.getElementById('jjlx_2').value">
+                            <td>
+                              <input class="btn btn-info btn-sm" type="button" id="qxsdyweitiao_1" value="<-" onclick="weijian2('jjlx_2','xianshijjlx_2')">
+                              微调
+                              <input class="btn btn-info btn-sm" type="button" id="qxsdyweitiao_1" value="->" onclick="weizeng2('jjlx_2','xianshijjlx_2')">
+                            </td>
+                            <td>
+                              <input style="width:40px" type="value" id="xianshijjlx_2" value="0.35" readonly/><p1>mm/r</p1>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td></td><td></td><td></td><td></td>
+                          </tr>
+
+                          <!-- 第3组进给量 -->
+                          <tr>
+                            <td>
+
+                            </td>
+                            <td>
+                              <input type="range" id="jjlx_3" min="0.1" max="0.6" step="0.01" onmouseup="document.getElementById('xianshijjlx_3').value=document.getElementById('jjlx_3').value">
+                            <td>
+                              <input class="btn btn-info btn-sm" type="button"  value="<-" onclick="weijian2('jjlx_3','xianshijjlx_3')">
+                							微调
+                							<input class="btn btn-info btn-sm" type="button"  value="->" onclick="weizeng2('jjlx_3','xianshijjlx_3')">
+                            </td>
+                            <td>
+                              <input style="width:40px" type="value" id="xianshijjlx_3" value="0.35" readonly/><p1>mm/r</p1>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td></td><td></td><td></td><td></td>
+                          </tr>
+
+                          <!-- 第4组进给量 -->
+                          <tr>
+                            <td>
+
+                            </td>
+                            <td>
+                              <input type="range" id="jjlx_4" min="0.1" max="0.6" step="0.01" onmouseup="document.getElementById('xianshijjlx_4').value=document.getElementById('jjlx_4').value">
+                            <td>
+                              <input class="btn btn-info btn-sm" type="button" id="qxsdyweitiao_1" value="<-" onclick="weijian2('jjlx_4','xianshijjlx_4')">
+                							微调
+                							<input class="btn btn-info btn-sm" type="button" id="qxsdyweitiao_1" value="->" onclick="weizeng2('jjlx_4','xianshijjlx_4')">
+                            </td>
+                            <td>
+                              <input style="width:40px" type="value" id="xianshijjlx_4" value="0.35" readonly/><p1>mm/r</p1>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td></td><td></td><td></td><td></td>
+                          </tr>
+
+                          <!-- 第5组进给量 -->
+                          <tr>
+                            <td>
+
+                            </td>
+                            <td>
+                              <input type="range" id="jjlx_5" min="0.1" max="0.6" step="0.01" onmouseup="document.getElementById('xianshijjlx_5').value=document.getElementById('jjlx_5').value">
+                            <td>
+                              <input class="btn btn-info btn-sm" type="button" id="qxsdyweitiao_1" value="<-" onclick="weijian2('jjlx_5','xianshijjlx_5')">
+                              微调
+                              <input class="btn btn-info btn-sm" type="button" id="qxsdyweitiao_1" value="->" onclick="weizeng2('jjlx_5','xianshijjlx_5')">
+                          </td>
+                            <td>
+                              <input style="width:40px" type="value" id="xianshijjlx_5" value="0.35" readonly/><p1>mm/r</p1>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td></td><td></td><td></td><td></td>
+                          </tr>
+
+                        </table>
+                        <!--隐藏的一些数据-->
+                        <input type="hidden" value="0.01" id="jjlx_6" min="0.1" max="0.6" step="0.01" onmouseup="document.getElementById('xianshijjlx_6').value=document.getElementById('jjlx_6').value">
+
+          							<input type="hidden" value="0.01" id="jjlx_7" min="0.1" max="0.6" step="0.01" onmouseup="document.getElementById('xianshijjlx_7').value=document.getElementById('jjlx_7').value">
+
+          							<input type="hidden" value="0.01" id="jjlx_8" min="0.1" max="0.6" step="0.01" onmouseup="document.getElementById('xianshijjlx_8').value=document.getElementById('jjlx_8').value">
+
+          							<input type="hidden" value="0.01" id="jjlx_9" min="0.1" max="0.6" step="0.01" onmouseup="document.getElementById('xianshijjlx_9').value=document.getElementById('jjlx_9').value">
+
+          							<input type="hidden" id="jjlx_10" value="0.01" min="0.1" max="0.6" step="0.01" onmouseup="document.getElementById('xianshijjlx_10').value=document.getElementById('jjlx_10').value">
+
+
+                       <input type="hidden"   name="xfc" id="jjlx_11" value="{{xfc}}">
+                       <input type="hidden"  name="yfc" id="jjlx_12" value="{{yfc}}">
+                       <input type="hidden" id="cfc"  name="cfc" value="{{cfc}}">
+                       <input type="hidden" id="kkfc"  name="kkfc" value="{{kkfc}}">
+                       <input type="hidden" id="klfc"  name="klfc" value="{{klfc}}">
+                       <input type="hidden" id="krfc" value="{{knfc}}">
+                       <input type="hidden" id="knfc" value="{{krfc}}">
+                       <input type="hidden" id="xuehao" value="{{password}}">
+                       <input class="ertyu" type="hidden" id="xingming" value="{{name}}">
+
+
+
+
+                        <table class="table table-hover">
+                        <tr>
+                          <td>
+                          </td>
+                          <td>
+                            <label  class="control-label">进给量（1）</label>
+
+                          </td>
+                          <td>
+                            <label  class="control-label">进给量（2）</label>
+                          </td>
+                          <td>
+                            <label  class="control-label">进给量（3）</label>
+                          </td>
+                          <td>
+                            <label  class="control-label">进给量（4）</label>
+                          </td>
+                          <td>
+                            <label  class="control-label">进给量（5）</label>
+                          </td>
+
+                        </tr>
+
+                        <tr>
+                          <td>
+                          <button class="btn btn-warning" type="button" onclick="fuwei()">界面复位</button>
+                          </td>
+                          <td>
+                            <button class="btn btn-success"  type="button" onclick="donghua100(
+                            document.getElementById('bcdlx').value,
+                            document.getElementById('qxsdx').value,
+                            document.getElementById('jjlx_1').value,
+                            document.getElementById('jjlx_2').value,
+                            document.getElementById('jjlx_3').value,
+                            document.getElementById('jjlx_4').value,
+                            document.getElementById('jjlx_5').value,
+                            document.getElementById('jjlx_6').value,
+                            document.getElementById('jjlx_7').value,
+                            document.getElementById('jjlx_8').value,
+                            document.getElementById('jjlx_9').value,
+                            document.getElementById('jjlx_10').value,
+                            document.getElementById('jjlx_11').value,
+                            document.getElementById('jjlx_12').value,0,this)">开始切削</button>
+                          </td>
+                          <td>
+                            <button class="btn btn-success"  type="button" onclick="donghua100(
+                            document.getElementById('bcdlx').value,
+                            document.getElementById('qxsdx').value,
+                            document.getElementById('jjlx_1').value,
+                            document.getElementById('jjlx_2').value,
+                            document.getElementById('jjlx_3').value,
+                            document.getElementById('jjlx_4').value,
+                            document.getElementById('jjlx_5').value,
+                            document.getElementById('jjlx_6').value,
+                            document.getElementById('jjlx_7').value,
+                            document.getElementById('jjlx_8').value,
+                            document.getElementById('jjlx_9').value,
+                            document.getElementById('jjlx_10').value,
+                            document.getElementById('jjlx_11').value,
+                            document.getElementById('jjlx_12').value,1,this)">开始切削</button>
+                          </td>
+                          <td>
+                            <button class="btn btn-success"  type="button" onclick="donghua100(
+                            document.getElementById('bcdlx').value,
+                            document.getElementById('qxsdx').value,
+                            document.getElementById('jjlx_1').value,
+                            document.getElementById('jjlx_2').value,
+                            document.getElementById('jjlx_3').value,
+                            document.getElementById('jjlx_4').value,
+                            document.getElementById('jjlx_5').value,
+                            document.getElementById('jjlx_6').value,
+                            document.getElementById('jjlx_7').value,
+                            document.getElementById('jjlx_8').value,
+                            document.getElementById('jjlx_9').value,
+                            document.getElementById('jjlx_10').value,
+                            document.getElementById('jjlx_11').value,
+                            document.getElementById('jjlx_12').value,2,this)">开始切削</button>
+                          </td>
+                          <td>
+                            <button class="btn btn-success"  type="button" onclick="donghua100(
+                            document.getElementById('bcdlx').value,
+                            document.getElementById('qxsdx').value,
+                            document.getElementById('jjlx_1').value,
+                            document.getElementById('jjlx_2').value,
+                            document.getElementById('jjlx_3').value,
+                            document.getElementById('jjlx_4').value,
+                            document.getElementById('jjlx_5').value,
+                            document.getElementById('jjlx_6').value,
+                            document.getElementById('jjlx_7').value,
+                            document.getElementById('jjlx_8').value,
+                            document.getElementById('jjlx_9').value,
+                            document.getElementById('jjlx_10').value,
+                            document.getElementById('jjlx_11').value,
+                            document.getElementById('jjlx_12').value,3,this)">开始切削</button>
+                          </td>
+                          <td>
+                            <button class="btn btn-success"  type="button" onclick="donghua100(
+                            document.getElementById('bcdlx').value,
+                            document.getElementById('qxsdx').value,
+                            document.getElementById('jjlx_1').value,
+                            document.getElementById('jjlx_2').value,
+                            document.getElementById('jjlx_3').value,
+                            document.getElementById('jjlx_4').value,
+                            document.getElementById('jjlx_5').value,
+                            document.getElementById('jjlx_6').value,
+                            document.getElementById('jjlx_7').value,
+                            document.getElementById('jjlx_8').value,
+                            document.getElementById('jjlx_9').value,
+                            document.getElementById('jjlx_10').value,
+                            document.getElementById('jjlx_11').value,
+                            document.getElementById('jjlx_12').value,4,this)">开始切削</button>
+                          </td>
+                        </tr>
+                      </table>
+                        <div>
+                          <center>
+                        <canvas width="750" height="540" id="donghua1_1">
+                        </canvas>
+                          </center>
+                        </div>
+                        <br><br>
+                        <br><br>
+                        <br><br>
+
+                        <div>
+                        <center>
+                        <button class="btn btn-success" type="button" onclick="gra_dra()">生成实验结果</button>
+                        <button class="btn btn-success" id="saveexpiamgebtn" onclick="saveExpImage()" >保存结果图象</button>
+                      </center><br>
+                      </div>
+                      <div>
+                        <center>
+                      <canvas width="540" height="550" id="tuxiang_1">
+                      </canvas>
+                    </center>
+
+                      </div>
+                      <div class="col-md-4">
+                      </div>
+                      <div class="col-md-5 center" id="qxlcanshukuang2_2">
+                      </div>
+                      <div class="col-md-3">
+                      </div>
+
+
+
+
+
+
+
+                    </div>
+
+                    </div>
+
+                    <center>
+                    <a class="btn btn-link" href="{% url 'hitvmm:exp_opr_1_2'%}">上一个子实验</a>
+                    <a class="btn btn-info" href="{% url 'hitvmm:exp_opr_1_4'%}">下一个子实验</a>
+                    </center>
+
+
+
+
+              </div>
+            </div>
+
+          </div>
+       </div>
+    </div>
+
+
+
+
+<script type="text/javascript" src="{% static 'exp_js/shiyan2_3yunsuan.js' %}"></script>
+<script type="text/javascript" src="{% static 'exp_js/weitiao.js' %}"></script>
+
+  </body>
+</html>

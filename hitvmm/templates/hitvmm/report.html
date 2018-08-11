@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <script src="{% static 'jquery3.3.1.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/plugins/pace.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <script>
+        //rsf安全问题解决
+          jQuery(document).ajaxSend(function(event, xhr, settings) {
+          function getCookie(name) {
+              var cookieValue = null;
+              if (document.cookie && document.cookie != '') {
+                  var cookies = document.cookie.split(';');
+                  for (var i = 0; i < cookies.length; i++) {
+                      var cookie = jQuery.trim(cookies[i]);
+                      // Does this cookie string begin with the name we want?
+                      if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                          break;
+                      }
+                  }
+              }
+              return cookieValue;
+          }
+          function sameOrigin(url) {
+              // url could be relative or scheme relative or absolute
+              var host = document.location.host; // host + port
+              var protocol = document.location.protocol;
+              var sr_origin = '//' + host;
+              var origin = protocol + sr_origin;
+              // Allow absolute or scheme relative URLs to same origin
+              return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                  (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                  // or any other URL that isn't scheme relative or absolute i.e relative.
+                  !(/^(\/\/|http:|https:).*/.test(url));
+          }
+          function safeMethod(method) {
+              return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+          }
+
+          if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+              xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+          }
+      });
+      //上传文件
+
+    function FileUpload() {
+
+            var experiment_id = $("input:radio[name='experiment_id']:checked").val();
+
+            if(experiment_id==undefined){
+                alert('提交报告前，请选择对应的实验名称~');
+                return false
+              }
+
+            var username= $("#username").text();
+            var userpassword= $("#userpassword").val();
+            var student_id=$("#student_id").val();
+            var timestamp = Date.parse(new Date());
+
+            var new_file_name = experiment_id+'_'+username+'_'+userpassword+'_'+timestamp+'.pdf';
+
+            var form_data = new FormData();
+            var file_info =$( '#file_upload')[0].files[0];
+            form_data.append('file',file_info);
+            form_data.append('new_file_name',new_file_name);
+            form_data.append('name',username);
+            form_data.append('password',userpassword);
+            form_data.append('user_id',student_id);
+            form_data.append('experiment_id',experiment_id);
+            form_data.append('timestamp',timestamp);
+
+
+            if(file_info==undefined){
+                alert('请选择您所要提交的文件，注意格式和大小要求~');
+                return false
+              }
+
+
+            if(file_info.type !='application/pdf'){
+                alert("文件不是PDF格式~");
+                return false
+              }
+
+
+
+            if(file_info.size >3*1024*1024){
+                alert("文件已经超过3M，上传失败~");
+                return false
+              }
+
+
+            $.ajax({
+                url:"{% url 'hitvmm:upload_ajax'%}",
+                type:'POST',
+                data: form_data,
+                processData: false,  // tell jquery not to process the data
+                contentType: false, // tell jquery not to set contentType
+                success: function(callback) {
+
+                    console.log('ok')
+                    alert("报告已提交~")
+                }
+            });
+
+            }
+    </script>
+
+    <title>实验报告</title>
+
+  </head>
+  <body class="sidebar-mini fixed">
+    <div class="wrapper">
+      <!-- Navbar-->
+      <header class="main-header hidden-print"><a class="logo" href="{% url 'hitvmm:index'%}">Virtual Machining Lab 3.0</a>
+        <nav class="navbar navbar-static-top">
+          <!-- Navbar Right Menu-->
+          <div class="navbar-custom-menu">
+            <div style="margin-top:15px;">
+              <center>
+
+                <h4>实验报告</h4>
+              </center>
+
+
+        </nav>
+      </header>
+      <!-- Side-Nav-->
+      <aside class="main-sidebar hidden-print">
+        <section class="sidebar">
+          <div class="user-panel">
+            <div class="pull-left image"><img class="img-circle" src="{% static 'pic/head.jpg' %}" alt="User Image"></div>
+            <div class="pull-left info">
+              <p id="username">{{name}}</p>
+              <a href="{% url 'hitvmm:login'%}">退出登录</a>
+            </div>
+          </div>
+          <!-- Sidebar Menu-->
+          <ul class="sidebar-menu">
+            <li><a href="{% url 'hitvmm:index'%}"><i class="fa fa-laptop"></i><span>实验预习</span></a></li>
+            <li><a href="{% url 'hitvmm:exp_opr'%}"><i class="fa fa-dashboard"></i><span>实验操作</span></a></li>
+            <li class="active"><a href="{% url 'hitvmm:report'%}"><i class="fa fa-file-text"></i><span>实验报告</span></a></li>
+          </ul>
+        </section>
+      </aside>
+      <div class="content-wrapper">
+
+
+          <div class="card">
+            <h3 class="card-title">提交报告</h3>
+            <div class="card-body">
+
+
+                <div class="form-group">
+                  <label class="control-label">提交报告必须为pdf格式文件且文件大小不超过2M。</label><br><br>
+
+
+                  <div class="form-group">
+                    <label class="col-lg-3 control-label">选择本次报告对应的实验</label>
+                    <div class="col-lg-10">
+                      <div class="radio">
+                        <label>
+                          <input id="optionsRadios1" type="radio" name="experiment_id" value="1" >切削用量对切削力的影响
+                        </label>
+                      </div>
+                      <div class="radio">
+                        <label>
+                          <input id="optionsRadios2" type="radio" name="experiment_id" value="2">切削用量对切削温度的影响
+                        </label>
+                      </div>
+                      <div class="radio">
+                        <label>
+                          <input id="optionsRadios3" type="radio" name="experiment_id" value="3">切削用量对表面粗糙度的影响
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <br>
+                  <input class="form-control" type="file" name="file" id="file_upload" >
+                </div>
+                <div class="form-group">
+
+                </div>
+
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-primary icon-btn" type="button" onclick="FileUpload()">确认提交</button>
+            </div>
+          </div>
+
+
+
+
+
+
+        <div class="card">
+          <div class="card-body">
+            <table class="table table-hover table-bordered" id="sampleTable">
+              <h4>已提交报告</h4>
+              <br>
+              <thead>
+                <tr>
+                  <th>序号</th>
+                  <th>实验名称</th>
+                  <th>提交时间</th>
+                  <th>评分</th>
+                  <th>评分老师</th>
+                  <th>评分时间</th>
+                </tr>
+              </thead>
+              <tbody>
+                {%for report in reports %}
+                    <tr>
+                      <td>{{ forloop.counter }}</td>
+                      {% if report.experiment_id == 1%}
+                      <td>切削用量对切削力的影响</td>
+                      {%endif%}
+                      {% if report.experiment_id == 2 %}
+                      <td>切削用量对切削温度的影响 </td>
+                      {%endif%}
+                      {% if report.experiment_id == 3 %}
+                      <td>切削用量对表面粗糙度的影响</td>
+                      {%endif%}
+
+                      <td>{{report.subm_time}}</td>
+                      {% if report.tatus == False %}
+                      <td>未评分</td>
+                      <td>--</td>
+                      <td>--</td>
+                      {%endif%}
+                      {% if report.score != 0 %}
+                      <td>{{report.score}}</td>
+                      <td>{{report.teacher_name}}</td>
+                      <td>{{report.score_time}}</td>
+                      {%endif%}
+                    </tr>
+                {%endfor%}
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+       </div>
+    </div>
+<input type="hidden" id='student_id' value="{{student_id}}">
+<input type="hidden" id='userpassword' value="{{password}}">
+  </body>
+</html>
